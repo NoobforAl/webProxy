@@ -26,6 +26,7 @@ func New(log contract.Logger, url string, proxyList []config.Proxy) *WebPage {
 		log:           log,
 		url:           url,
 		urlDomain:     url,
+		proxyList:     proxyList,
 		sizeListProxy: len(proxyList),
 	}
 }

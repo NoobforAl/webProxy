@@ -26,9 +26,10 @@ func New(conf []*config.UrlRequester, log contract.Logger) BuilderHttp {
 	builderHttp := make(BuilderHttp)
 	for _, v := range conf {
 		http := httpSub{
-			name:   v.Name,
-			domain: v.Domain,
-			log:    log,
+			name:      v.Name,
+			domain:    v.Domain,
+			proxyList: v.ProxyList,
+			log:       log,
 		}
 		builderHttp[v.Name] = http.getWebPage()
 	}
@@ -42,8 +43,8 @@ func (hs httpSub) getWebPage() Handelr {
 		defer cancel()
 
 		ina := interactor.New(hs.log, hs.domain, hs.proxyList).
-			SetupProxy().
 			SetHeader(r.Header).
+			SetupProxy().
 			SetPath(path)
 
 		ina, err := ina.NewRequest(ctx, r.Method, r.Body)
