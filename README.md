@@ -35,6 +35,8 @@ service:
 And run code:
 > go run main.go
 
+or download executable file in [release](https://github.com/NoobforAl/webProxy/releases/tag/v0.1.0) page.
+
 #### How build ?
 > go build -o prWeb.exe main.go
 
