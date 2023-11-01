@@ -19,3 +19,13 @@
 
 # Go workspace file
 go.work
+
+# air config and tmp folder
+.air.toml
+tmp
+
+# build folder
+build
+
+# log file
+*.log

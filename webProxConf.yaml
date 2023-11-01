@@ -1,0 +1,14 @@
+listen: "localhost:2020"
+logfile: "./log.log"
+debug: false
+
+service:
+    Ieee:
+      domain: "https://ieeexplore.ieee.org"
+      url: "ieee.localhost"
+
+    Google:
+      domain: "https://google.com"
+      url: "google.localhost"
+
+
