@@ -1,46 +1,105 @@
 package config
 
 import (
+	"errors"
 	"os"
 
 	"gopkg.in/yaml.v2"
 )
 
-type Auth struct {
+// proxy configure
+//
+// ```yaml
+// proxy:
+//   - addr: "localhost:2020"
+//     username: "user"
+//     password: "pass"
+//   - addr: "localhost:2020"
+//     username: "user"
+//     password: "pass"
+//
+// ```
+type Proxy struct {
+	Addr     string `yaml:"addr"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
 
-type Proxy struct {
-	Addr string `yaml:"addr"`
-	Auth Auth   `yaml:"auth"`
-}
-
+// service configure
+//
+// ```yaml
+// servicedomain: "http://example.com"
+// serviceurl: "example.localhost"
+// proxy:
+//   - addr: "localhost:2020"
+//     username: "user"
+//     password: "passs"
+//
+// ```
 type Service struct {
-	Domain string  `yaml:"domain"`
-	Url    string  `yaml:"url"`
-	Proxy  []Proxy `yaml:"proxy"`
+	// service domain when you want request
+	ServiceDomain string `yaml:"servicedomain"`
+
+	// service url you want request in local address
+	ServiceUrl string `yaml:"serviceurl"`
+
+	// list of proxy
+	ProxyList []Proxy `yaml:"proxylist"`
 }
 
+// base config app
+//
+// ```yaml
+// listen: "localhost:2020"
+// logfile: ""
+// debug: false
+//
+// service:
+//
+//	   example:
+//			servicedomain: "http://example.com"
+//			serviceurl: "example.localhost"
+//			proxylist:
+//	 	 		- addr: "localhost:2020"
+//	   			  username: "user"
+//	    		  password: "passs"
+//	 	 		- addr: "localhost:2020"
+//	   			  username: "user"
+//	    		  password: "passs"
+//
+// ```
 type ConfigWebProxy struct {
-	Debug   bool               `yaml:"debug"`
-	LogFile string             `yaml:"logfile"`
-	Listen  string             `yaml:"listen"`
+	// run debug mode app
+	Debug bool `yaml:"debug"`
+
+	// path of log file
+	LogFile string `yaml:"logfile"`
+
+	// list ip:port
+	Listen string `yaml:"listen"`
+
+	// list of service
 	Service map[string]Service `yaml:"service"`
 }
 
-var Arg ConfigWebProxy
+var (
+	// all config in yaml file load in this variable
+	Arg ConfigWebProxy
 
+	// program load config errors
+	errLoadFile   = errors.New("Error load config file: ")
+	errParsConfig = errors.New("Error pars config file: ")
+)
+
+// loaded config file when app start working
 func init() {
-	b, err := os.ReadFile("webProxConf.yaml")
+	b, err := os.ReadFile("wpconf.yaml")
 	if err != nil {
-		errMsg := "Error load config file: " + err.Error()
-		panic(errMsg)
+		panic(errors.Join(errLoadFile, err))
 	}
 
 	err = yaml.Unmarshal(b, &Arg)
 	if err != nil {
-		errMsg := "Error load config file: " + err.Error()
-		panic(errMsg)
+		panic(errors.Join(errParsConfig, err))
 	}
 }
