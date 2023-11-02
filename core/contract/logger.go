@@ -1,35 +1,27 @@
 package contract
 
+// logger method need imaption this function
+//
+// list of method in this interface
 type Logger interface {
-	Debug(args ...interface{})
-	Debugln(args ...interface{})
-	Debugf(format string, args ...interface{})
+	Debug(args ...any)
+	Debugf(format string, args ...any)
 
-	Info(args ...interface{})
-	Infoln(args ...interface{})
-	Infof(format string, args ...interface{})
+	Info(args ...any)
+	Infof(format string, args ...any)
 
-	Warn(args ...interface{})
-	Warnln(args ...interface{})
-	Warnf(format string, args ...interface{})
+	Warn(args ...any)
+	Warnf(format string, args ...any)
 
-	Warning(args ...interface{})
-	Warningln(args ...interface{})
-	Warningf(format string, args ...interface{})
+	Warning(args ...any)
+	Warningf(format string, args ...any)
 
-	Print(args ...interface{})
-	Println(args ...interface{})
-	Printf(format string, args ...interface{})
+	Error(args ...any)
+	Errorf(format string, args ...any)
 
-	Error(args ...interface{})
-	Errorln(args ...interface{})
-	Errorf(format string, args ...interface{})
+	Fatal(args ...any)
+	Fatalf(format string, args ...any)
 
-	Fatal(args ...interface{})
-	Fatalln(args ...interface{})
-	Fatalf(format string, args ...interface{})
-
-	Panic(args ...interface{})
-	Panicln(args ...interface{})
-	Panicf(format string, args ...interface{})
+	Panic(args ...any)
+	Panicf(format string, args ...any)
 }
