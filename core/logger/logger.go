@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"errors"
 	"io"
 	"os"
 	"web_proxy/core/contract"
@@ -8,18 +9,28 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func New(debug bool, logFile string) contract.Logger {
-	var out io.Writer = os.Stderr
-	var err error
+var (
+	errOpenLogFile = errors.New("open log file error: ")
+)
 
-	if logFile != "" {
-		out, err = os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+// create new logger
+func New(debug bool, pathLogFile string) contract.Logger {
+	var (
+		logLevel logrus.Level = logrus.InfoLevel
+		out      io.Writer    = os.Stderr
+		err      error
+	)
+
+	// check if path log file is not empty
+	// load log file and save log in file
+	if pathLogFile != "" {
+		flag := os.O_APPEND | os.O_CREATE | os.O_WRONLY
+		out, err = os.OpenFile(pathLogFile, flag, 0600)
 		if err != nil {
-			panic(err)
+			panic(errors.Join(errOpenLogFile, err))
 		}
 	}
 
-	logLevel := logrus.InfoLevel
 	if debug {
 		logLevel = logrus.DebugLevel
 	}
