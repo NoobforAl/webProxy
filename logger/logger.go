@@ -4,7 +4,7 @@ import (
 	"errors"
 	"io"
 	"os"
-	"web_proxy/core/contract"
+	"web_proxy/contract"
 
 	"github.com/sirupsen/logrus"
 )
