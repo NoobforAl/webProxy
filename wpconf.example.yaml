@@ -1,0 +1,26 @@
+listen: "localhost:2020"
+logfile: ""
+debug: false
+
+service:
+  example1:
+    servicedomain: "http://example.com"
+    serviceurl: "example.localhost"
+    proxylist:
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
+
+  example2:
+    servicedomain: "http://example.com"
+    serviceurl: "example.localhost"
+    proxylist:
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
