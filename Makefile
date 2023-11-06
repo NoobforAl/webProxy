@@ -2,7 +2,7 @@ GO := go
 SH := sh
 GO_RUN := $(GO) run
 GO_BUILD := $(GO) build
-PATH_MAIN := ./cmd/main.go
+PATH_MAIN := ./main.go
 BUILD_OUT := ./webPer
 BUILD_FILE := ./build_release.sh
 
