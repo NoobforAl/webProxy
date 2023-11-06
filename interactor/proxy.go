@@ -2,23 +2,15 @@ package interactor
 
 import (
 	"crypto/tls"
-	"encoding/base64"
 	"math/rand"
 	"net/http"
 	"net/url"
+	"time"
 	"web_proxy/config"
 )
 
-// type func proxy for returned function
-type proxyFunc func(req *http.Request) (*url.URL, error)
-
-// pars address proxy to ulr struct
-func (_ WebProxy) parsProxyUrl(proxyURL string) proxyFunc {
-	return func(_ *http.Request) (*url.URL, error) {
-		u, err := url.Parse(proxyURL)
-		return u, err
-	}
-}
+// skip verify tls if is not valid
+var tlsConf = &tls.Config{InsecureSkipVerify: true}
 
 // chose random proxy form list
 //
@@ -32,10 +24,16 @@ func (wp WebProxy) chooseProxyAdrr() *config.Proxy {
 }
 
 // setup new proxy if exists
-func (wp *WebProxy) SetupProxy() *WebProxy {
-	// skip verify tls if is not valid
-	tlsConfig := &tls.Config{InsecureSkipVerify: true}
-	transport := &http.Transport{TLSClientConfig: tlsConfig}
+func (wp *WebProxy) SetProxy() *WebProxy {
+	transport := &http.Transport{
+		TLSClientConfig:       tlsConf,
+		ForceAttemptHTTP2:     true,
+		MaxIdleConns:          100,
+		IdleConnTimeout:       90 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+	}
+
 	wp.client.Transport = transport
 
 	proxyConf := wp.chooseProxyAdrr()
@@ -44,11 +42,13 @@ func (wp *WebProxy) SetupProxy() *WebProxy {
 		return wp
 	}
 
-	wp.log.Info("setup proxy client | ", proxyConf.Addr)
-	userPass := proxyConf.Username + ":" + proxyConf.Password
-	userPass = "Basic " + base64.StdEncoding.EncodeToString([]byte(userPass))
+	proxyUrl, err := url.Parse(proxyConf.Addr)
+	if err != nil {
+		return wp
+	}
 
-	wp.req.Header.Add("Proxy-Authorization", userPass)
-	transport.Proxy = wp.parsProxyUrl(proxyConf.Addr)
+	wp.log.Info("setup proxy client | ", proxyConf.Addr)
+	proxyUrl.User = url.UserPassword(proxyConf.Username, proxyConf.Password)
+	transport.Proxy = http.ProxyURL(proxyUrl)
 	return wp
 }
