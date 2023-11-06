@@ -4,32 +4,35 @@ See content website on localhost.
 
 ### How run it ?
 first setup config file like this:  
-Config file example(file name: webProxConf.yaml):
+Config file example(file name: wpconf.yaml):
 ```yaml
 listen: "localhost:2020"
-logfile: "./log.log"
+logfile: ""
 debug: false
 
 service:
-  Example1:
-    domain: "https://example1.org"
-    url: "subdomain.domain"
-    
-    proxy:
-      - addr: "http://localhost:2022"
-        auth: 
-          username: "test"
-          password: "test"
+  example1:
+    servicedomain: "http://example.com"
+    serviceurl: "example.localhost"
+    proxylist:
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
 
-  Example2:
-    domain: "https://example1.org"
-    url: "subdomain.domain"
+  example2:
+    servicedomain: "http://example.com"
+    serviceurl: "example.localhost"
+    proxylist:
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
+      - addr: "localhost:2020"
+        username: "user"
+        password: "passs"
 
-    proxy:
-      - addr: "http://localhost:2021"
-        auth: 
-          username: "test"
-          password: "test"
 ```
 
 And run code:
