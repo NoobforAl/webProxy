@@ -29,3 +29,6 @@ build
 
 # log file
 *.log
+
+# ignore config file
+wpconf.yaml
