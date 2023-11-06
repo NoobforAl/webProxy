@@ -16,7 +16,7 @@ func (wp *WebProxy) MakeAddr(path string) *WebProxy {
 }
 
 // setup client for new request
-func (wp *WebProxy) SetClient(path string) *WebProxy {
+func (wp *WebProxy) SetClient() *WebProxy {
 	client := &http.Client{}
 	wp.client = client
 	return wp
@@ -28,7 +28,7 @@ func (wb *WebProxy) SetRequest(
 	method string,
 	bodyReq io.Reader,
 ) (*WebProxy, error) {
-	wb.log.Info("create new request | ", method)
+	wb.log.Infof("create new request | %s | %s ", method, wb.reqUrl)
 	req, err := http.NewRequestWithContext(ctx, method, wb.reqUrl, bodyReq)
 	if err != nil {
 		return wb, err
